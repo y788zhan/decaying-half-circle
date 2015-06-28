@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="halfcirclestyle.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script>
+			var count = 0;
+			$(document).ready(function(e) {
+				$('.container').click(function(e) {
+					var x = e.pageX;
+					var y = e.pageY
+					// 20 balls on screen at any time
+					initiate(this.children[count % 20], x, y);
+					count += 1;
+				});
+			});
+			function initiate(elem, x, y) {
+				// ball appears where mouse click is
+				elem.style.left = x + 'px';
+				elem.style.top = y + 'px';
+				elem.style.display = "inline";
+				var num = (Math.random() * 1000) % 10;
+				// randomly generated ball colour
+				elem.style.backgroundColor = "#"+((1<<24)*Math.random()|0).toString(16);
+				move(elem, x, y);
+			}
+			function move(elem, x, y) {
+				var left = x;
+				var change = 0
+				// balls on left section of the screen moves to the right, balls on the right section of the screen moves to the elft
+				var section = Math.round(left / 1545);
+				var top = 510;
+				var low = left - (510 - y);
+				var high = 510 - y + left;
+				var mark = 510 - y;
+				// itr for iterations, each half circle is an iteration
+				var itr = 0;
+				function frame() {
+					// +2 to make balls move quicker
+					left += 2;
+					change += 2;
+					if (section == 0) {
+						elem.style.left = left + 'px';
+					} else {
+						elem.style.left = x - change + 'px';
+					}
+					// pause movement and hide ball after ball leaves black box
+					if ((section == 0 && left > 1533) || (section == 1 && x - change < 10)) {
+						clearInterval(id);
+						elem.style.display = "none";
+						return;
+					}else if (left >= low && left <= high) {
+						elem.style.top = top - Math.round(Math.sqrt(Math.pow(mark * Math.pow(0.5, itr), 2) - Math.pow((low + high) / 2 - left, 2)));
+					} else {
+						// variable updates, the radius of the next half circle is half of the radius of the previous circle
+						low = high;
+						high += mark * Math.pow(0.5, itr);
+						itr += 1;
+					}
+				}
+				var id = setInterval(frame, 1); 
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+			<div hidden class="block"></div>
+		</div>
+	</body>
+</html>
